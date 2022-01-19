@@ -12,28 +12,33 @@ function Homepage() {
   const [stateName, setStateName] = useState("State");
   const [cityName, setCityName] = useState("City");
 
-  useEffect(async () => {
-    const listOfData = await fetch("https://assessment-edvora.herokuapp.com/");
-    console.log(listOfData.response);
-    const extractedData = await listOfData.json();
-    console.log(extractedData);
-    setListOfData(extractedData);
-    setListOfProducts(extractedData);
+  useEffect(() => {
+    const fetchData = async () => {
+      const listOfData = await fetch(
+        "https://assessment-edvora.herokuapp.com/"
+      );
+      console.log(listOfData.response);
+      const extractedData = await listOfData.json();
+      console.log(extractedData);
+      setListOfData(extractedData);
+      setListOfProducts(extractedData);
 
-    const productList = extractedData
-      .map((item) => item.product_name)
-      .filter((value, index, self) => self.indexOf(value) === index);
-    setUniqueProductList(productList);
+      const productList = extractedData
+        .map((item) => item.product_name)
+        .filter((value, index, self) => self.indexOf(value) === index);
+      setUniqueProductList(productList);
 
-    const stateList = await extractedData
-      .map((item) => item.address.state)
-      .filter((value, index, self) => self.indexOf(value) === index);
-    setUniqueStateList(stateList);
+      const stateList = await extractedData
+        .map((item) => item.address.state)
+        .filter((value, index, self) => self.indexOf(value) === index);
+      setUniqueStateList(stateList);
 
-    const cityList = await extractedData
-      .map((item) => item.address.city)
-      .filter((value, index, self) => self.indexOf(value) === index);
-    setUniqueCityList(cityList);
+      const cityList = await extractedData
+        .map((item) => item.address.city)
+        .filter((value, index, self) => self.indexOf(value) === index);
+      setUniqueCityList(cityList);
+    };
+    fetchData();
   }, []);
 
   const leftSlide = () => {
@@ -159,7 +164,11 @@ function Homepage() {
             {listOfProducts.map((data, index) => (
               <div key={index} className="product-details">
                 <div className="left-side-pd">
-                  <img src={data.image} className="image" alt="no img" />
+                  <img
+                    src={data.image}
+                    className="image"
+                    alt={data.product_name}
+                  />
                   <p>
                     {data.address.state}
                     <br />
@@ -199,7 +208,11 @@ function Homepage() {
               return (
                 <div key={index} className="product-details">
                   <div className="left-side-pd">
-                    <img src={data.image} className="image" alt="no image" />
+                    <img
+                      src={data.image}
+                      className="image"
+                      alt={data.product_name}
+                    />
                     <p>
                       {data.address.state}
                       <br />
